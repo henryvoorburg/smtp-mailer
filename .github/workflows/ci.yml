@@ -15,6 +15,7 @@ on:
       - '**.json'
       - '**.xml'
       - '**.yml'
+  workflow_dispatch:
 
 jobs:
   tests:
