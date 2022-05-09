@@ -49,6 +49,7 @@ SMTP Mailer service require an env file in INI format. An example env file is in
 | `MAILER_THREADS` | `int` | 4 | **Required**. Number of spawned service workers. |
 | `MAILER_MAX_MEMORY` | `int` | 64 (in MB) | **Optional**. Service will auto-restart if memory usage exceeded this value (in MB)  |
 | `MAILER_MAX_REQUEST` | `int` | -1 | **Optional**. Service will auto-restart if number of processed request exceeded this value. -1 to disable limit  |
+| `MAILER_TIMEOUT` | `int` | 300 (in secs) | **Optional**. SMTP Timeout. PHPMailer default is 5 mins with compliance to RFC2821 |
 | `MAILER_LOG` | `bool` | true | **Optional**. Enable service logging  |
 | `MAILER_LOG_LEVEL` | `string` | "notice" | **Optional**. Service logging level. ("debug", "info", "notice", "warning" or "error") |
 | `MAILER_LOG_OUTPUT` | `string` | "error_log" | **Optional**. Service logging output. "error_log" to use PHP default error_log settings or "syslog" to output log directly to system log  |

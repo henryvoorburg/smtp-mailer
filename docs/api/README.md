@@ -97,8 +97,6 @@ Sending SMTP mail with specified template and replace string
         "to": ["user@domain.com"],
         "ccList": [],
         "bccList": [],
-        "attachments": [],
-        "embedded": [],
         "subject": "This is subject",
         "useTemplate": "myTemplate.html",
         "replaceContent": {
@@ -114,8 +112,9 @@ Sending SMTP mail with specified template and replace string
 | `to` | `array` | **Required**. Mail recipients. Items can be string of address or array of [address, name]  |
 | `ccList` | `array` | **Required**. CC recipients. Items can be string of address or array of [address, name]  |
 | `bccList` | `array` | **Required**. BCC recipients. Items can be string of address or array of [address, name]  |
-| `attachments` | `array` | **Required**. Attachments list. Items must be array of [filePath, fileName] |
-| `embedded` | `array` | **Required**. Embedded image list. Items must be array of [filePath, cid, fileName] |
+| `replyTo` | `array` | **Optional**. Reply-To recipients. Items can be string of address or array of [address, name]  |
+| `attachments` | `array` | **Optional**. Attachments list. Items must be array of [filePath, fileName] |
+| `embedded` | `array` | **Optional**. Embedded image list. Items must be array of [filePath, cid, fileName] |
 | `subject` | `string` | **Required**. Mail subject. It will be encoded in base64 format automatically |
 | `body` | `string` | **Required** if not using `useTemplate`. Mail Body. Plaintext or HTML string |
 | `useTemplate` | `string` | **Required** if not using `body`. Template file name you wish to use |
@@ -127,6 +126,7 @@ Sending SMTP mail with specified template and replace string
 | `smtpPassword` | `string` | **Optional**. Override default SMTP password in env |
 | `smtpEncryption` | `string` | **Optional**. Override default SMTP encryption method in env |
 | `smtpPort` | `string` | **Optional**. Override default SMTP port in env |
+| `timeout` | `int` | **Optional**. Override default SMTP timeout in env |
 
 Success Response
 ```json
@@ -183,8 +183,6 @@ Adding mail to queue with scheduled send time
         "to": ["user@domain.com"],
         "ccList": [],
         "bccList": [],
-        "attachments": [],
-        "embedded": [],
         "subject": "This is subject",
         "body": "<html>This is content</html>"
     }

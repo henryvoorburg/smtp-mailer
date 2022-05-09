@@ -340,7 +340,6 @@ Please make sure to read the [Contributing Guide](CONTRIBUTING.md) before making
 
 ## License
 
-[MIT](LICENSE)
-This project is licensed under the MIT License
+This project is licensed under the [MIT](LICENSE) License
 
 Copyright (c) 2022, Eric Chow
