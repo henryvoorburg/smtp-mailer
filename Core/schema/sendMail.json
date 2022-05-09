@@ -93,6 +93,36 @@
                 ]
             }
         },
+        "replyTo": {
+            "type": "array",
+            "items": {
+                "oneOf": [
+                    {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "prefixItems": [
+                            {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 320,
+                                "format": "email"
+                            },
+                            {
+                                "type": "string",
+                                "minLength": 1
+                            }
+                        ]
+                    },
+                    {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 320,
+                        "format": "email"
+                    }
+                ]
+            }
+        },
         "attachments": {
             "type": "array",
             "items": {
@@ -162,6 +192,10 @@
         "smtpPort": {
             "enum": [587, 465]
         },
+        "timeout": {
+            "type": "integer",
+            "minimum": 1
+        },
         "scheduleTime": {
             "type": "integer"
         },
@@ -173,8 +207,6 @@
         "to",
         "ccList",
         "bccList",
-        "attachments",
-        "embedded",
         "subject"
     ],
     "oneOf": [

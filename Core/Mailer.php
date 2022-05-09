@@ -84,6 +84,7 @@ class Mailer {
         array $recipients,
         array $ccList,
         array $bccList,
+        array $replyTo,
         array $attachments,
         array $embedded,
         string $subject,
@@ -94,7 +95,8 @@ class Mailer {
         string $smtpPassword = '',
         string $smtpHost = '',
         int $smtpPort = 0,
-        string $smtpEncryption = ''
+        string $smtpEncryption = '',
+        int $timeout = 300
     ): array {
         $mail = new PHPMailer(true);
 
@@ -108,6 +110,7 @@ class Mailer {
             $mail->Host       = empty($smtpHost) ? Config::getEnv('SMTP_HOST') : $smtpHost;
             $mail->Username   = empty($smtpUser) ? Config::getEnv('SMTP_USER') : $smtpUser;
             $mail->Password   = empty($smtpPassword) ? Config::getSmtpPassword() : $smtpPassword;
+            $mail->Timeout    = $timeout;
 
             // Sent from
             $mail->setFrom(
@@ -139,7 +142,14 @@ class Mailer {
                     $mail->addBCC($bcc[0], self::encodeMimeHeader($bcc[1]));
                 }
             }
-            // $mail->addReplyTo('info@example.com', 'Information');
+            // Add reply to
+            foreach ($replyTo as $reply) {
+                if (is_string($reply)) {
+                    $mail->addReplyTo($reply);
+                } elseif (is_array($reply) && count($reply) == 2) {
+                    $mail->addReplyTo($reply[0], self::encodeMimeHeader($reply[1]));
+                }
+            }
 
 
             // Add Attachments
@@ -219,6 +229,7 @@ class Mailer {
                     $data['to'] ?? [],
                     $data['ccList'] ?? [],
                     $data['bccList'] ?? [],
+                    $data['replyTo'] ?? [],
                     $data['attachments'] ?? [],
                     $data['embedded'] ?? [],
                     $data['subject'] ?? '',
@@ -229,7 +240,8 @@ class Mailer {
                     $data['smtpPassword'] ?? '',
                     $data['smtpHost'] ?? '',
                     $data['smtpPort'] ?? 0,
-                    $data['smtpEncryption'] ?? ''
+                    $data['smtpEncryption'] ?? '',
+                    $data['timeout'] ?? Config::getEnv('MAILER_TIMEOUT')
                 );
 
                 if ($sent) {

@@ -53,6 +53,7 @@ class Config {
         'MAILER_THREADS' => 4,
         'MAILER_MAX_MEMORY' => 64,
         'MAILER_MAX_REQUEST' => -1,
+        'MAILER_TIMEOUT' => 300,
         'MAILER_LOG' => true,
         'MAILER_LOG_LEVEL' => 'notice',
         'MAILER_LOG_OUTPUT' => 'error_log',
