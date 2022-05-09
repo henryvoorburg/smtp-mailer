@@ -1,7 +1,7 @@
 {
     "name": "ecmchow/smtp-mailer",
     "description": "SMTP mail sending and scheduling service",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -29,7 +29,7 @@
 		}
 	},
     "archive": {
-        "exclude": [".github", ".env", ".git", ".php-cs-fixer.dist.php", "box.json", "phpunit.xml", "/dist", "/vendor", "/test", "/tools", "*.lock", "*.log"]
+        "exclude": [".github", ".env", ".git", ".drone.yml", ".php-cs-fixer.dist.php", "box.json", "phpunit.xml", "/dist", "/vendor", "/test", "/tools", "*.lock", "*.log"]
     },
     "scripts": {
         "autoload": "@composer dump-autoload -o",
