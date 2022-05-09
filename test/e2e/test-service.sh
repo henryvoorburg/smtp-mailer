@@ -12,15 +12,18 @@ do
     esac
 done
 
-bold=$(tput bold)
-underline=$(tput smul)
-italic=$(tput sitm)
+# when $TERM is empty
+[[ ${TERM}=="" ]] && TPUTTERM='-T xterm-256color' || TPUTTERM=''
 
-info=$(tput setaf 2)
-error=$(tput setaf 160)
-warn=$(tput setaf 214)
-highlight=$(tput smso)
-reset=$(tput sgr0)
+bold=$(tput ${TPUTTERM} bold)
+underline=$(tput ${TPUTTERM} smul)
+italic=$(tput ${TPUTTERM} sitm)
+
+info=$(tput ${TPUTTERM} setaf 2)
+error=$(tput ${TPUTTERM} setaf 160)
+warn=$(tput ${TPUTTERM} setaf 214)
+highlight=$(tput ${TPUTTERM} smso)
+reset=$(tput ${TPUTTERM} sgr0)
 
 tests=0
 assertions=0
@@ -45,61 +48,61 @@ declare -x CMDS=(
 )
 
 # service-basic
-function testServiceBasic() {
+testServiceBasic () {
     if [ "$phar" = true ]; then
-        php ${entry} start --basepath ../ --env test/env/auth-disabled.env & sleep 0.1
+        php "${entry}" start --basepath ../ --env test/env/auth-disabled.env & sleep 0.1
     else
-        php ${entry} start --env test/env/auth-disabled.env & sleep 0.1
+        php "${entry}" start --env test/env/auth-disabled.env & sleep 0.1
     fi
     ${phpunit} --testsuite service-basic || true
     result=$( tail -n 1 ${output} )
-    php ${entry} stop & sleep 0.1
+    php "${entry}" stop & sleep 0.1
     echo "${result}"
 }
 
 # service-auth
-function testServiceAuth() {
+testServiceAuth () {
     if [ "$phar" = true ]; then
-        php ${entry} start --basepath ../ --env test/env/sodium.env & sleep 0.1
+        php "${entry}" start --basepath ../ --env test/env/sodium.env & sleep 0.1
     else
-        php ${entry} start --env test/env/sodium.env & sleep 0.1
+        php "${entry}" start --env test/env/sodium.env & sleep 0.1
     fi
     ${phpunit} --testsuite service-auth || true
     result=$( tail -n 1 ${output} )
-    php ${entry} stop & sleep 0.1
+    php "${entry}" stop & sleep 0.1
     echo "${result}"
 }
 
 # service-ssl
-function testServiceSSL() {
+testServiceSSL () {
     if [ "$phar" = true ]; then
-        php ${entry} start --basepath ../ --env test/env/api-allow-edit.env & sleep 0.1
+        php "${entry}" start --basepath ../ --env test/env/api-allow-edit.env & sleep 0.1
     else
-        php ${entry} start --env test/env/api-allow-edit.env & sleep 0.1
+        php "${entry}" start --env test/env/api-allow-edit.env & sleep 0.1
     fi
     ${phpunit} --testsuite service-ssl || true
     result=$( tail -n 1 ${output} )
-    php ${entry} stop & sleep 0.1
+    php "${entry}" stop & sleep 0.1
     echo "${result}"
 }
 
 # service-auth-ssl
-function testServiceAuthSSL() {
+testServiceAuthSSL () {
     if [ "$phar" = true ]; then
-        php ${entry} start --basepath ../ --env test/env/openssl-aes128-bcrypt.env & sleep 0.1
+        php "${entry}" start --basepath ../ --env test/env/openssl-aes128-bcrypt.env & sleep 0.1
     else
-        php ${entry} start --env test/env/openssl-aes128-bcrypt.env & sleep 0.1
+        php "${entry}" start --env test/env/openssl-aes128-bcrypt.env & sleep 0.1
     fi
     ${phpunit} --testsuite service-auth-ssl || true
     result=$( tail -n 1 ${output} )
-    php ${entry} stop & sleep 0.1
+    php "${entry}" stop & sleep 0.1
     echo "${result}"
 }
 # --------- Add/Modify Test ABOVE ---------
 
 
-function start() {
-    local step=0
+start () {
+    step=0
 
     while [ "$step" -lt "${#CMDS[@]}" ]; do
         echo -ne "\\n"
@@ -174,20 +177,20 @@ if [ "$errors" -gt 0 ]; then
     echo -ne "${error}Tests: ${tests}, Assertions: ${assertions}, Failures: ${failures}, Errors: ${errors}${reset}\\n"
     echo -ne "\\n"
     echo -ne "${italic}Please view ${output} for details${reset}\\n"
-    trap "php ${entry} stop >/dev/null 2>/dev/null" EXIT
+    trap 'php "${entry}" stop >/dev/null 2>/dev/null' EXIT
     exit 5
 elif [ "$failures" -gt 0 ]; then
     echo -ne "${bold}SUMMARY:${reset} ${warn}${highlight} FAILED ${reset}\\n"
     echo -ne "${warn}Tests: ${tests}, Assertions: ${assertions}, Failures: ${failures}${reset}\\n"
     echo -ne "\\n"
     echo -ne "${italic}Please view ${output} for details${reset}\\n"
-    trap "php ${entry} stop >/dev/null 2>/dev/null" EXIT
+    trap 'php "${entry}" stop >/dev/null 2>/dev/null' EXIT
     exit 5
 else
     echo -ne "${bold}SUMMARY:${reset} ${info}${highlight} PASSED ${reset}\\n"
     echo -ne "${info}Tests: ${tests}, Assertions: ${assertions}${reset}\\n"
     echo -ne "\\n"
     echo -ne "${italic}Please view ${output} for details${reset}\\n"
-    trap "php ${entry} stop >/dev/null 2>/dev/null" EXIT
+    trap 'php "${entry}" stop >/dev/null 2>/dev/null' EXIT
     exit 0
 fi

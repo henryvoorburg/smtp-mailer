@@ -182,8 +182,6 @@ final class ServiceSslTest extends TestCase {
                         'to' => ['user@example.test'],
                         'ccList' => [],
                         'bccList' => [],
-                        'attachments' => [],
-                        'embedded' => [],
                         'subject' => 'This is subject',
                         'body' => '<html>This is content</html>'
                     ]
@@ -197,6 +195,7 @@ final class ServiceSslTest extends TestCase {
                         'to' => ['user@example.test'],
                         'ccList' => [],
                         'bccList' => [],
+                        'replyTo' => ['user@example.test'],
                         'attachments' => [],
                         'embedded' => [],
                         'subject' => 'This is subject',

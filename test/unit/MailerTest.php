@@ -217,6 +217,9 @@ final class MailerTest extends TestCase {
     public function testCanSendMockEmail($input, array $expected): void {
 
         $this->expectOutputRegex('/SMTP Error: Could not connect to SMTP host./');
+        
+        // clear previous stream
+        $temp = stream_get_contents(self::$capture);
 
         $this->assertSame(
             $expected,
@@ -235,8 +238,6 @@ final class MailerTest extends TestCase {
                         'to' => ['user@example.test'],
                         'ccList' => [],
                         'bccList' => [],
-                        'attachments' => [],
-                        'embedded' => [],
                         'subject' => 'This is subject',
                         'body' => self::$templateHTML
                     ]
@@ -250,10 +251,45 @@ final class MailerTest extends TestCase {
                         'to' => ['user@example.test'],
                         'ccList' => [],
                         'bccList' => [],
+                        'replyTo' => ['user@example.test'],
                         'attachments' => [],
                         'embedded' => [],
                         'subject' => 'This is subject',
                         'useTemplate' => 'test-1.html'
+                    ]
+                ],
+                self::expectedResponse('error', 'SMTP Error: Could not connect to SMTP host.', 'failed to send mail') // expected
+            ],
+            // case 2
+            [
+                [
+                    'sendMail' => [
+                        'to' => [],
+                        'ccList' => [
+                            ['user@example.test', 'Name']
+                        ],
+                        'bccList' => [],
+                        'replyTo' => [
+                            ['user@example.test', 'Name']
+                        ],
+                        'attachments' => [],
+                        'embedded' => [],
+                        'subject' => 'This is subject',
+                        'useTemplate' => 'test-1.html'
+                    ]
+                ],
+                self::expectedResponse('error', 'SMTP Error: Could not connect to SMTP host.', 'failed to send mail') // expected
+            ],
+            // case 3
+            [
+                [
+                    'sendMail' => [
+                        'to' => ['user@example.test'],
+                        'ccList' => [],
+                        'bccList' => [],
+                        'subject' => 'This is subject',
+                        'body' => self::$templateHTML,
+                        'timeout' => 3
                     ]
                 ],
                 self::expectedResponse('error', 'SMTP Error: Could not connect to SMTP host.', 'failed to send mail') // expected
@@ -265,8 +301,11 @@ final class MailerTest extends TestCase {
         $queueFiles = self::scanQueueJsonFiles();
         $expectedData = self::sendEmailDataProvider();
 
-        if (count($queueFiles) !== count($expectedData)) {
-            throw new \Exception("Expected output JSON files number not matched");
+        $queueCount = count($queueFiles);
+        $expectedCount = count($expectedData);
+
+        if ($queueCount !== $expectedCount) {
+            throw new \Exception("Expected output JSON files number not matched (Expected: {$expectedCount}, Found: {$queueCount})");
         }
 
         for ($i = 0; $i < count($queueFiles); $i++) {
@@ -383,6 +422,9 @@ final class MailerTest extends TestCase {
         }
 
         $this->expectOutputRegex('/SMTP Error: Could not connect to SMTP host./');
+
+        // clear previous stream
+        $temp = stream_get_contents(self::$capture);
 
         $this->assertSame(
             self::expectedResponse('error', 'SMTP Error: Could not connect to SMTP host.', 'failed to send mail and added back to queue'),
