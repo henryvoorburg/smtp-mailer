@@ -11,6 +11,7 @@ steps:
   - apt-get update && apt install -y php7.4 php7.4-common php7.4-cli php7.4-curl php7.4-mbstring php7.4-xml php7.4-xdebug 
   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   - chmod -R +x tools
+  - composer install
   - tools/php-cs-fixer-v3.phar fix Core --using-cache=no --diff --dry-run --verbose
   - tools/php-cs-fixer-v3.phar fix start-mailer.php --using-cache=no --diff --dry-run --verbose
   - php tools/phpunit-9.5.phar --testsuite core-units
@@ -34,6 +35,7 @@ steps:
   - apt-get update && apt install -y php8.1 php8.1-common php8.1-cli php8.1-curl php8.1-mbstring php8.1-xml php8.1-xdebug 
   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   - chmod -R +x tools
+  - composer install
   - tools/php-cs-fixer-v3.phar fix Core --using-cache=no --diff --dry-run --verbose
   - tools/php-cs-fixer-v3.phar fix start-mailer.php --using-cache=no --diff --dry-run --verbose
   - php tools/phpunit-9.5.phar --testsuite core-units
