@@ -28,6 +28,7 @@ use Workerman\Worker;
 use Workerman\Connection\TcpConnection;
 use Workerman\Timer;
 
+const MAILER_VERSION = '1.0.2';
 const MAILER_NAME = 'SMTPMailer';
 const QUEUE_NAME = 'SMTPMailQueue';
 
@@ -38,6 +39,8 @@ $validator = null;
 $config = null;
 
 if (isset($argv[1]) && ($argv[1] === 'start' || $argv[1] === 'restart')) {
+    echo MAILER_NAME . ' - version ' .  MAILER_VERSION . PHP_EOL;
+    echo '---------------------------' . PHP_EOL;
     $cmdEnv = array_search('--env', $argv);
     if ($cmdEnv !== false && isset($argv[$cmdEnv+1])) {
         $env = $argv[$cmdEnv+1];
@@ -57,6 +60,7 @@ if (!empty(\Phar::running(false))) {
     $pharPath = implode('/', $parts) . '/';
     Worker::$logFile = $pharPath . 'smtp-mailer-workerman.log';
     Worker::$pidFile = $pharPath . 'smtp-mailer-workerman.pid';
+    Worker::$statusFile = $pharPath . 'smtp-mailer-workerman.status';
 }
 
 $enableSSL = Config::getEnv('MAILER_SSL');
